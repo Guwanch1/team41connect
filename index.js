@@ -236,7 +236,47 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-    res.render('register.ejs');
+    let pageData = { 'username' : '', 'email' : '', errors: [] };
+
+    res.render('register.ejs', { pageData });
+});
+
+function checkPasswordSecurity(password) {
+    let errors = [];
+   
+    if (password.length < 8) {
+        errors.push('Password must be at least 8 characters long');
+    }
+
+    if (!/[a-z]/.test(password)) {
+        errors.push('Password must contain at least one lowercase letter');
+    }
+
+    if (!/[A-Z]/.test(password)) {
+        errors.push('Password must contain at least one uppercase letter');
+    }   
+
+    if (!/[0-9]/.test(password)) {
+        errors.push('Password must contain at least one number');
+    }
+
+    if (!/[^a-zA-Z0-9]/.test(password)) {
+        errors.push('Password must contain at least one special character');
+    }   
+
+    return errors;
+}
+
+app.post('/register', async (req, res) => {
+
+    let {username, email, password} = req.body;
+    
+    let pageData = { 'username' : username, 'email' : email, errors: checkPasswordSecurity(password) };
+
+    if (pageData.errors.length > 0) {  
+        res.render('register.ejs', { pageData });
+        return;
+    }
 });
 
 app.listen(port, () => {
