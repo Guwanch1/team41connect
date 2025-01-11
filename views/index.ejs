@@ -1,0 +1,36 @@
+<%- include('parts/header.ejs') %>
+
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+
+    <div class="container">
+        <h1>Select an Option</h1>
+        <form method="POST" action="/generate">
+            <div class="form-group">
+                <label for="options">Options</label>
+                <select class="form-control" id="options" name="inboundId">
+                    <% data.obj.forEach(function(inbound) { %>
+                        <option value="<%= inbound.id + '?' + inbound.protocol %>"><%= inbound.protocol %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tgid">Telegram ID (optional)</label>
+                <input type="text" class="form-control" name="tgid" id="thid">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+
+<%- include('parts/footer.ejs') %>
